@@ -65,6 +65,75 @@ public class LinkedListDeque<tp>{
         return first.item;
     }
 
+    public tp removeLast(){
+        if(size == 0){
+            return null;
+        }
+        Node last = sentinel.prev;
+        sentinel.prev = last.prev;
+        last.prev.next = sentinel;
+        size--;
+        return last.item;
+    }
+
+    public boolean equals(Object o)
+
+    {
+        if (o == this) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
+        // comfirm object o is LinkedListDeque
+
+        LinkedListDeque other = (LinkedListDeque) o;
+        // convert object o to LinkedListDeque
+
+        if (other.size() != this.size()) {
+            return false;
+        }
+
+        Node p = sentinel.next;
+        Node q = other.sentinel.next;
+        while (p != sentinel) {
+            if (!p.item.equals(q.item)) {
+                return false;
+            }
+            p = p.next;
+            q = q.next;
+        }
+        return true;
+    }
+
+    public tp get(int index){
+        if(index >= size){
+            return null;
+        }
+        Node p = sentinel.next;
+        for(int i = 0; i < index; i++){
+            p = p.next;
+        }
+        return p.item;
+    }
+    
+    public tp getRecursive(int index){
+        if(index >= size){
+            return null;
+        }
+        return getRecursiveHelper(sentinel.next, index);
+    }
+    
+    private tp getRecursiveHelper(Node p, int index){
+        if(index == 0){
+            return p.item;
+        }
+        tp recursiveHelper = getRecursiveHelper(p.next, index - 1);
+        return recursiveHelper;
+    }
 }
 
 
