@@ -1,7 +1,7 @@
 package deque;
-import org.junit.Test;
+import java.util.Iterator;
 
-public class LinkedListDeque<tp>{
+public class LinkedListDeque<tp> implements Iterable<tp>{
     int size = 0;
     private Node sentinel;
 
@@ -126,7 +126,7 @@ public class LinkedListDeque<tp>{
         }
         return getRecursiveHelper(sentinel.next, index);
     }
-    
+
     private tp getRecursiveHelper(Node p, int index){
         if(index == 0){
             return p.item;
@@ -134,6 +134,27 @@ public class LinkedListDeque<tp>{
         tp recursiveHelper = getRecursiveHelper(p.next, index - 1);
         return recursiveHelper;
     }
+
+    public Iterator<tp> iterator(){
+        return new LinkedListDequeIterator();
+    }
+
+    private class LinkedListDequeIterator implements Iterator<tp>{
+        private Node p = sentinel.next;
+        public boolean hasNext(){
+            return p != sentinel;
+        }
+        public tp next(){
+            if (!hasNext()) {
+                throw new java.util.NoSuchElementException("No more items to return.");
+            }
+            tp item = p.item;
+            p = p.next;
+            return item;
+        }
+    }
+
 }
+
 
 
