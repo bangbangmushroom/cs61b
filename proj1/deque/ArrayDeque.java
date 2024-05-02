@@ -22,13 +22,22 @@ public class ArrayDeque<T> implements Deque<T> {
         }
     }
 
-    /* this is naked cercle array
-    *  useage : inedx[conertIndex(index)];
-    *  good for remove and add
-     */
     private int conertIndex(int index){
         int conpoent = conpoent(index);
         return (DataStart + conpoent) % arraysize;
+    }
+    /* this is naked cercle array
+     *  useage : inedx[conertIndex(index)];
+     *  good for remove and add
+     */
+
+    private int conertArrayIndex(int index){
+        int conertIndex = conertIndex(index);
+        return (DataStart + conertIndex) % arraysize;
+    }
+
+    private void AatoResize(){
+        }
     }
 
 }
