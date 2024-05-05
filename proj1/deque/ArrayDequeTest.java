@@ -68,4 +68,25 @@ public class ArrayDequeTest {
         }
     }
 
+    @Test
+    public void getTest2() {
+        ArrayDeque<Integer> ad1 = new ArrayDeque<>();
+        for (int i = 0; i < 5; i++) {
+            ad1.addFirst(i);
+        }
+        assertEquals("ad1 should contain 1000000 items", 5, ad1.size());
+
+        for (int i = 0; i < 5; i++) {
+            assertEquals(i, (int) ad1.get(i));
+        }
+    }
+
+    public void testResize() {
+        ArrayDeque<Integer> ad1 = new ArrayDeque<>();
+        for (int i = 0; i < 1000000; i++) {
+            ad1.addFirst(i);
+        }
+        assertEquals("ad1 should contain 1000000 items", 1000000, ad1.size());
+    }
+
 }
