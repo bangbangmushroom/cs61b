@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author jerry
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -106,13 +106,16 @@ public class Model extends Observable {
      *    value, then the leading two tiles in the direction of motion merge,
      *    and the trailing tile does not.
      * */
+    private boolean changed;
     public boolean tilt(Side side) {
-        boolean changed;
         changed = false;
 
-        // TODO: Modify this.board (and perhaps this.score) to account
+        tiltHelperChangeSide(side);
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        for (int r = board.size() - 1; r >= 0; r--){
+            tileUpRow(r);
+        }
 
         checkGameOver();
         if (changed) {
@@ -121,6 +124,46 @@ public class Model extends Observable {
         return changed;
     }
 
+    private void tileUpRow(int r){
+        for (int c = board.size() - 1; c >= 0; c--){
+            Tile nowTile = board.tile(c, r);
+            if (nowTile == null){
+                continue;
+            }
+
+            Tile nestTile = tiltGetNextUp(nowTile);
+
+            if (nestTile == null){
+                board.move(c, 3, nowTile);
+                continue;
+            }
+
+            if (nestTile.value() == nowTile.value()){
+                board.move(nestTile.col(), nestTile.row(), nestTile);
+                changed = true;
+            }
+            else {
+                board.move(nestTile.col(), nestTile.row() - 1, nestTile);
+            }
+        }
+    }
+
+    private Tile tiltGetNextUp(Tile t){
+        int row = t.row();
+        int col = t.col();
+        for (int i = row; i < board.size(); i++){
+            if (board.tile(col, i) == null){
+                continue;
+            }
+            else
+                return board.tile(i, row);
+        }
+        return null;
+    }
+
+    private void tiltHelperChangeSide(Side side){
+        board.setViewingPerspective(side);
+    }
     /** Checks if the game is over and sets the gameOver variable
      *  appropriately.
      */
@@ -137,7 +180,13 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        for(int i = 0; i < b.size(); i++){
+            for (int c = 0; c < b.size(); c++){
+                 if (b.tile(i, c) == null) {
+                     return true;
+                 }
+            }
+        }
         return false;
     }
 
@@ -147,7 +196,14 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        for(int i = 0; i < b.size(); i++){
+            for (int c = 0; c < b.size(); c++){
+                if (b.tile(i, c) == null){continue;}
+                if(b.tile(i, c).value() == MAX_PIECE)
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -158,7 +214,7 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+
         return false;
     }
 
